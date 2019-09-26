@@ -1,20 +1,23 @@
-from statistics import mode
-
 import cv2
+import dlib
 from keras.models import load_model
 import numpy as np
+import os
+import sys
 
 from utils.inference import detect_faces
 from utils.inference import apply_offsets
 from utils.inference import make_face_coordinates
 from utils.preprocessor import preprocess_input
 
+os.chdir(sys.path[0])
 emotion_offsets = (20, 40)
+emotion_model_path = './trained_models/fer2013_mini_XCEPTION.102-0.66.hdf5'
 
 
 class EmotionDetector:
-    def __init__(self, face_detector,
-                 emotion_classifier):
+    def __init__(self, face_detector=dlib.get_frontal_face_detector(),
+                 emotion_classifier=load_model(emotion_model_path, compile=False)):
         self.face_detector = face_detector
         self.emotion_classifier = emotion_classifier
 
@@ -41,7 +44,7 @@ class EmotionDetector:
 
         gray_face = gray_image[coord[2]:coord[3], coord[0]:coord[1]]
         emotion_target_size = self.emotion_classifier.input_shape[1:3]
-        #此处可能会出现gray_face为空的错
+        # 此处可能会出现gray_face为空的错
         gray_face = cv2.resize(gray_face, emotion_target_size)
         gray_face = preprocess_input(gray_face, True)
         gray_face = np.expand_dims(gray_face, 0)
