@@ -1,8 +1,6 @@
-import datetime
 import cv2
 import numpy as np
 
-from emotion_detector import EmotionDetector
 from utils.datasets import get_labels
 
 emotion_labels = get_labels('fer2013')
@@ -38,3 +36,10 @@ def get_emotion_stream(video_path, frame_interval_ms, detector):
         frame_no += interval_frame_num
 
     return emotion_stream
+
+
+def get_image_emotion(image, detector):
+    if image is None or np.size(image) is 0:
+        return None
+    return detector.detect(image)
+

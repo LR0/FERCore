@@ -1,7 +1,4 @@
 import datetime
-import cv2
-import dlib
-from keras.engine.saving import load_model
 
 from detect_functions import get_emotion_stream
 from emotion_detector import EmotionDetector
