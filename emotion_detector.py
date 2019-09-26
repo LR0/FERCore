@@ -44,7 +44,8 @@ class EmotionDetector:
 
         gray_face = gray_image[coord[2]:coord[3], coord[0]:coord[1]]
         emotion_target_size = self.emotion_classifier.input_shape[1:3]
-        # 此处可能会出现gray_face为空的错
+        if np.size(gray_face) is 0:
+            return None
         gray_face = cv2.resize(gray_face, emotion_target_size)
         gray_face = preprocess_input(gray_face, True)
         gray_face = np.expand_dims(gray_face, 0)
