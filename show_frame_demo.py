@@ -1,6 +1,6 @@
 import datetime
 
-from detect_functions import save_emotion_images
+from detect_functions import save_biggest_emotion_images, save_biggest_emotion_images_cut
 from emotion_detector import EmotionDetector
 from utils.datasets import get_labels
 
@@ -10,7 +10,7 @@ save_image_path = 'C:/Users/admin/Videos/cases/output/case7_images'
 
 
 start = datetime.datetime.now()
-save_emotion_images(test_video_path, 1000, EmotionDetector(), save_image_path)
+save_biggest_emotion_images(test_video_path, save_image_path, EmotionDetector(), 1000)
 end = datetime.datetime.now()
 print(end - start)
 
