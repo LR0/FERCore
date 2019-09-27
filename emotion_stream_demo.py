@@ -11,7 +11,7 @@ output_text_path = 'C:/Users/admin/Videos/cases/output/case1_emotion_stream.txt'
 
 def main():
     f = open(output_text_path, 'w')
-    emotion_stream = get_emotion_stream(test_video_path, 1000)
+    emotion_stream = get_emotion_stream(test_video_path, EmotionDetector(), 1000)
     for frame_emotion in emotion_stream:
         # print(str(frame_emotion.time / 1000) + 's')
         # print(str(frame_emotion.prediction))
