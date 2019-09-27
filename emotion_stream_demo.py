@@ -5,8 +5,8 @@ from emotion_detector import EmotionDetector
 from utils.datasets import get_labels
 
 emotion_labels = get_labels('fer2013')
-test_video_path = 'C:/Users/admin/Videos/cases/case1.mp4'
-output_text_path = 'C:/Users/admin/Videos/cases/output/case1_emotion_stream.txt'
+test_video_path = 'C:/Users/admin/Videos/cases/case7.mp4'
+output_text_path = 'C:/Users/admin/Videos/cases/output/case7_emotion_stream.txt'
 
 
 def main():
