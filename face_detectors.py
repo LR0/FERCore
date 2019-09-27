@@ -16,8 +16,13 @@ class IFaceDetector(metaclass=ABCMeta):
 
 
 class DlibFaceDetector(IFaceDetector):
+    def __init__(self):
+        self.detector = dlib.get_frontal_face_detector()
+
     def detect_faces(self, gray_image_array):
-        return dlib.get_frontal_face_detector().run(gray_image_array, 0, 0)
+        # 下面这条狗屎会使得每调用一次函数就构建一个frontal_face_detector模型对象，只执行一次run方法然后释放
+        # return dlib.get_frontal_face_detector().run(gray_image_array, 0, 0) <-----拖慢程序速度，造成cpu占用率下降的元凶
+        return self.detector.run(gray_image_array, 0, 0)  # 正确的写法，只构建一次模型对象，保存下来重复使用
 
     def get_biggest_face(self, gray_image, emotion_offsets):
         detected_faces, score, idx = self.detect_faces(gray_image)

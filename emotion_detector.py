@@ -1,7 +1,4 @@
-from abc import ABCMeta, abstractmethod
-
 import cv2
-import dlib
 from keras.models import load_model
 import numpy as np
 import os
@@ -13,6 +10,7 @@ from utils.preprocessor import preprocess_input
 
 os.chdir(sys.path[0])
 emotion_offsets = (20, 40)
+# 默认模型地址
 emotion_model_path = './trained_models/fer2013_mini_XCEPTION.102-0.66.hdf5'
 
 
