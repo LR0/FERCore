@@ -5,8 +5,8 @@ from emotion_detector import EmotionDetector
 from utils.datasets import get_labels
 
 emotion_labels = get_labels('fer2013')
-test_video_path = 'C:/Users/admin/Videos/cases/case7.mp4'
-save_image_path = 'C:/Users/admin/Videos/cases/output/case7_images'
+test_video_path = 'C:/Users/admin/Videos/cases/case1.mp4'
+save_image_path = 'C:/Users/admin/Videos/cases/output/case_images_1010'
 
 
 start = datetime.datetime.now()
