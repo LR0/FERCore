@@ -5,17 +5,7 @@ import dlib
 from utils.inference import make_face_coordinates, apply_offsets
 
 
-class IFaceDetector(metaclass=ABCMeta):
-    @abstractmethod
-    def detect_faces(self, gray_image):
-        pass
-
-    @abstractmethod
-    def get_biggest_face(self, gray_image, emotion_offsets):
-        pass
-
-
-class DlibFaceDetector(IFaceDetector):
+class DlibFaceDetector:
     def __init__(self):
         self.detector = dlib.get_frontal_face_detector()  # 只构建一次模型对象，保存下来重复使用
 
