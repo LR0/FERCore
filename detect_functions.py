@@ -1,7 +1,7 @@
 import os
-
 import cv2
 import numpy as np
+import json
 
 from utils.inference import draw_text
 
@@ -31,7 +31,10 @@ def get_emotion_stream(video_path, detector, frame_interval_ms):
             frame_no += interval_frame_num
             continue
         time = int(video_capture.get(cv2.CAP_PROP_POS_MSEC))
-        prediction = detector.detect_biggest(frame)
+        prediction, _ = detector.detect_biggest(frame)
+        if prediction is None:
+            frame_no += interval_frame_num
+            continue
         frame_emotion = FrameEmotion(time, prediction)
         emotion_stream.append(frame_emotion)
         frame_no += interval_frame_num
@@ -120,7 +123,7 @@ def save_biggest_emotion_images(video_path, save_path, detector, frame_interval_
         color = color.astype(int)
         color = color.tolist()
 
-        text = emotion_text + ' ' + str(time/1000) + 's'
+        text = emotion_text + ' ' + str(time / 1000) + 's'
         cv2.rectangle(frame, (coord[0], coord[2]), (coord[1], coord[3]), color, 2)
         draw_text(coord, frame, text,
                   color, 0, -45, 1, 1)
@@ -178,7 +181,7 @@ def save_biggest_emotion_images_cut(video_path, save_path, detector, frame_inter
         color = color.astype(int)
         color = color.tolist()
 
-        text = emotion_text + ' ' + str(time/1000) + 's'
+        text = emotion_text + ' ' + str(time / 1000) + 's'
         cv2.rectangle(frame, (coord[0], coord[2]), (coord[1], coord[3]), color, 2)
         draw_text(coord, frame, text,
                   color, 0, -45, 1, 1)
@@ -187,3 +190,35 @@ def save_biggest_emotion_images_cut(video_path, save_path, detector, frame_inter
 
     video_capture.release()
     return
+
+
+# 根据固定时长抽帧并分析,返回为json格式
+def get_emotion_stream_json(video_path, detector, frame_interval_ms):
+    video_capture = cv2.VideoCapture(video_path)
+    if not video_capture.isOpened():
+        return []
+    fps = video_capture.get(cv2.CAP_PROP_FPS)
+    frame_count = video_capture.get(cv2.CAP_PROP_FRAME_COUNT)
+    emotion_stream = []
+    frame_no = 1  # 抽取帧的序号
+    interval_frame_num = int(frame_interval_ms / 1000 * fps)  # 间隔帧数
+    if interval_frame_num < 1:
+        interval_frame_num = 1  # 防止帧间隔为0的情况
+    while frame_no <= frame_count:
+        video_capture.set(cv2.CAP_PROP_POS_FRAMES, frame_no)
+        frame = video_capture.read()[1]
+        if frame is None or np.size(frame) is 0:
+            frame_no += interval_frame_num
+            continue
+        time = int(video_capture.get(cv2.CAP_PROP_POS_MSEC))
+        prediction, _ = detector.detect_biggest(frame)
+        if prediction is None:
+            frame_no += interval_frame_num
+            continue
+        frame_emotion = FrameEmotion(time, prediction.tolist())
+        emotion_stream.append(frame_emotion.__dict__)
+        frame_no += interval_frame_num
+
+    video_capture.release()
+    emotion_stream_json = json.dumps(emotion_stream)
+    return emotion_stream_json
