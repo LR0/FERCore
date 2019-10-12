@@ -1,5 +1,4 @@
 import datetime
-import json
 
 from detect_functions import get_emotion_stream
 from detect_functions import get_emotion_stream_json
@@ -12,7 +11,7 @@ output_text_path = '../cases/output/case1_emotion_stream.txt'
 
 
 def main():
-    case2()
+    case1()
 
 
 def case1():
